@@ -44,7 +44,6 @@ function createFeatures(earthquakeData) {
     }).bindPopup("<h3>" + feature.properties.place + 
     "</h3><hr><p>" + new Date(feature.properties.time) + "<p>"));
   }
-
   // create a json layer contain the features array on the earthquakeData
   // run the onEachFeature function once for each piece of data
   var earthquakes = L.geoJSON(earthquakeData, {
@@ -56,15 +55,29 @@ function createFeatures(earthquakeData) {
 
 function createMap(earthquakes) {
   // define map layers
+  var satelliteMap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+    attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+    maxZoom: 18,
+    id: "mapbox/satellite-v9",
+    accessToken: API_KEY  
+  });
   var grayscaleMap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
     maxZoom: 18,
     id: "mapbox/light-v10",
     accessToken: API_KEY  
   });
+  var outdoorsMap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+    attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+    maxZoom: 18,
+    id: "mapbox/outdoors-v11",
+    accessToken: API_KEY  
+  });
 
   var baseMaps = {
+    "Satellite": satelliteMap,
     "Grayscale": grayscaleMap,
+    "Outdoors": outdoorsMap
   }
   // create markers
   var earthquakes = L.layerGroup(earthquakeMarkers);
