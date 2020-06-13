@@ -11,27 +11,30 @@ var earthquakeMarkers = [];
 // function createFeatures to extract data
 function createFeatures(earthquakeData) {
   // define a function to run for each feature
+
+
+
   function onEachFeature(feature) {
     //layer.bindPopup("<h3>" + feature.properties.place + 
     //  "</h3><hr><p>" + new Date(feature.properties.time) + "<p>");
     var color = "";
     if (feature.properties.mag <1) {
-      color = "green";
+      color = "#FED976";
     }
     else if (feature.properties.mag <2) {
-      color = "yellow";
+      color = "#FEB24C";
     }
     else if (feature.properties.mag <3) {
-      color = "orange";
+      color = "#FD8D3C";
     }
     else if (feature.properties.mag <4) {
-      color = "purple";
+      color = "#FC4E2A";
     }
     else if (feature.properties.mag <5) {
-      color = "red";
+      color = "#E31A1C";
     }
     else if (feature.properties.mag >=5) {
-      color = "black";
+      color = "#BD0026";
     }
     // console.log(feature.geometry.coordinates)
     earthquakeMarkers.push(
@@ -80,6 +83,36 @@ function createMap(earthquakes) {
     zoom: 5,
     layers: [grayscaleMap, earthquakes]
   });
+
+
+  var legend = L.control({position: 'bottomright'});
+  // add a legend
+    legend.onAdd = function() {
+      var magnitudes = [0, 1, 2, 3, 4, 5];
+      var labels = [];
+      var div = L.DomUtil.create('div', 'info legend');
+      //
+      for (var i = 0; i < magnitudes.length; i++) {
+        div.innerHTML += 
+          '<i style="background:' + getColor(magnitudes[i]) +'"></i>' +
+          magnitudes[i] + (magnitudes[i+1] ? '&ndash;' + magnitudes[i+1] + '<br>': '+');
+      }
+      return div;
+    
+    };
+    
+    var d = ["#FED976","#FEB24C" ,"#FD8D3C", "#FC4E2A", "#E31A1C","#BD0026"];
+
+    function getColor(d) {
+      return d < 1 ? "#FED976" :
+             d < 2  ? "#FEB24C" :
+             d < 3  ? "#FD8D3C":
+             d < 4  ? "#FC4E2A" :
+             d < 5   ? "#E31A1C":
+                      "#BD0026"  ;
+    }
+  
+    legend.addTo(myMap);
 
   L.control.layers(baseMaps, overlayMaps, {
     collapsed: false
